@@ -189,7 +189,6 @@ struct WeatherReport
     void sunset( bool isDay, double time );
     int updateTemperature ( int currentTemp );
     void measureAirQuality ( int qualityIndex );
-
 };
 /*
  10)
@@ -198,11 +197,10 @@ struct GiftCard
 {
     double cardBalance = 100.00;
     unsigned int expirationDate = 20221231; //yyyymmdd
-    const double cardNumber = 6155200244839177;
+    const double cardNumber = 6155200244839177.0;
 
     void makePurchase(double currentBalance, double itemCost, unsigned int expiration);
     double reloadCard(double currentBalance, double addBalance);
-
 };
 
 #include <iostream>

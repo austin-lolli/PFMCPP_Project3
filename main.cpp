@@ -14,7 +14,7 @@ Video:  Chapter 2 Part 5
     make the function parameter list for those member functions use some of your User-Defined Types
  
  4) make 2 of the 10 user-defined types be nested class
- 
+  
  5) One of your UDTs should only use UDTs for its member variable types.   
      No primitives allowed!
  

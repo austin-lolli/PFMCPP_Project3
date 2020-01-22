@@ -12,6 +12,56 @@ Create a branch named Part2
     You'll need to insert the Person struct from the video in the space below.
  */
 
+struct Person 
+{
+    int age;
+    int height;
+    float hairLength;
+    float GPA;
+    unsigned int SATScore;
+    int distanceTraveled;
+
+    void run( int howFast, bool startWithLeftFoot );
+
+    struct Foot
+    {
+        int stepLength;
+
+        void stepForward();
+        int stepSize();
+    };
+};
+
+void Person::Foot::stepForward()
+{
+
+}
+
+int Person::Foot::stepSize()
+{
+    return Person::Foot::stepLength;
+}
+
+static Person::Foot leftFoot{3};
+static Person::Foot rightFoot{4};
+
+void Person::run( int howFast, bool startWithLeftFoot )
+{
+    if( howFast > 0)
+    {
+        if( startWithLeftFoot == true )
+        {
+            leftFoot.stepForward();
+            rightFoot.stepForward();
+        }
+        else
+        {
+            rightFoot.stepForward();
+            leftFoot.stepForward();
+        }
+    }
+    distanceTraveled += leftFoot.stepSize() + rightFoot.stepSize();
+}
 
 
 
@@ -36,11 +86,16 @@ Create a branch named Part2
  */
 struct Headphones
 {
-    bool powerSwitch = true;
     unsigned int volume = 3;
+    bool powerSwitch = true;
 
-    void increaseVolume( int vol );
+    void increaseVolume( unsigned int vol );
 };
+
+void Headphones::increaseVolume ( unsigned int vol )
+{
+    Headphones::volume = vol;
+}
 /*
  2)
  */
@@ -57,9 +112,31 @@ struct Scoreboard
         int playerNumber = 99;
     };
 
-    void startGame( float gameClock );
-    void callPenalty( Penalty penalty ); 
+    void startGame();
+    void callPenalty( Penalty penalty, int playerNum, bool isMajor ); 
 };
+
+void Scoreboard::startGame()
+{
+    Scoreboard::timeRemaining = 20.00f;
+    Scoreboard::period = 1;
+    Scoreboard::homeScore = 0;
+    Scoreboard::awayScore = 0;
+}
+
+void Scoreboard::callPenalty( Scoreboard::Penalty penalty, int playerNum, bool isMajor )
+{
+    if( isMajor == true )
+    {
+        penalty.penaltyTime = 5.00f;
+    }
+    else
+    {
+        penalty.penaltyTime = 2.00f;
+    }
+
+    penalty.playerNumber = playerNum;    
+}
 /*
  3)
  */
@@ -74,9 +151,25 @@ struct Team
     double winPercentage = 0.444;
     bool isPlayoffTeam = false;
 
-    int lineChange( int playerToBench, int PlayerToStart );
+    void lineChange( int LW, int RW, int C, int LD, int RD );
     double calculateWinPercentage( double seasonWins, double seasonLoss );
 };
+
+void Team::lineChange( int LW, int RW, int C, int LD, int RD )
+{
+    Team::leftWing = LW;
+    Team::rightWing = RW;
+    Team::center = C;
+    Team::leftDefense = LD;
+    Team::rightDefense = RD;
+}
+
+double Team::calculateWinPercentage( double seasonWins, double seasonLoss)
+{
+    double total = seasonWins + seasonLoss;
+    
+    return seasonWins / total; 
+}
 /*
  4)
  */
@@ -88,12 +181,32 @@ struct IceRink
 
     struct Zamboni //nested 2
     {
-        float waterTankVolume = 20.0f;
+        double waterTankVolume = 20.0;
         bool isBroken = false;
     };
 
     void resurfaceIce( Zamboni zamboni );
 };
+
+void IceRink::resurfaceIce( Zamboni zamboni )
+{
+    if( zamboni.isBroken == false )
+    {
+        if( zamboni.waterTankVolume >= 2.0 )
+        {
+            IceRink::iceIsResurfaced = true;
+            zamboni.waterTankVolume -= 2.0;
+        }
+        else //fill up the tank
+        {
+            while( zamboni.waterTankVolume < 20.0 )
+            {
+                ++zamboni.waterTankVolume;
+            }
+
+        }
+    }
+}
 /*
  5)
  */
@@ -101,17 +214,22 @@ struct Referee
 {
     bool isBlind = true;
     unsigned int yearsExperience = 8;
+    bool puckInPlay = false;
 
-    void callPenalty( int playerNumber );
-    void faceOff( Team home, Team away );
+    void faceOff();
 };
+
+void Referee::faceOff()
+{
+    Referee::puckInPlay = true;
+}
 /*
  6)
  */
 struct Attendee
 {
-    bool homeTeamFan = 1;
-    bool isHyped = 0;
+    bool homeTeamFan = true;
+    bool isHyped = false;
     int age = 25;
 
     struct Ticket // nested 3
@@ -122,8 +240,16 @@ struct Attendee
         unsigned int seat = 4;
     };
 
-    void cheerForTeam( bool homeTeamFan );
+    void cheerForTeam( bool homeFan );
 };
+
+void Attendee::cheerForTeam( bool homeFan )
+{
+    if( homeFan == true )
+    {
+        Attendee::isHyped = true;
+    }
+}
 /*
  7)
  */
@@ -142,6 +268,25 @@ struct Game
     bool hypeUpFans( Attendee fan );
     void intermission( Attendee fan, Scoreboard stateOfGame );
 };
+
+bool Game::hypeUpFans( Attendee fan )
+{
+    if( fan.homeTeamFan == true )
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+void Game::intermission( Attendee fan, Scoreboard stateOfGame )
+{
+    fan.isHyped = false;
+    stateOfGame.timeRemaining = 20.00f;
+    ++stateOfGame.period;
+}
 /*
  8)
  */
@@ -151,11 +296,39 @@ struct Television
     unsigned int volume = 15;
     unsigned int channel = 48;
     
-    void setVolume( int vol );
-    void changeChannel( int changeTo );
+    void setVolume( unsigned int vol );
+    void changeChannel( unsigned int changeTo );
     bool powerSwitch( bool power );
     void playThroughHeadphones( Headphones headphones );
 };
+
+void Television::setVolume( unsigned int vol )
+{
+    Television::volume = vol;
+}
+
+void Television::changeChannel( unsigned int changeTo )
+{
+    Television::channel = changeTo;
+}
+
+bool Television::powerSwitch( bool power )
+{
+    if( power == true )
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+void Television::playThroughHeadphones( Headphones headphones )
+{
+    Television::volume = 0;
+    headphones.powerSwitch = true;
+}
 /*
  9)
  */
@@ -169,22 +342,60 @@ struct WeatherReport
     double timeOfDay = 14.50;
     bool isDaytime = true;
 
-    void sunset( bool isDay, double time );
+    void sunset( double time );
     int updateTemperature ( int currentTemp );
-    void measureAirQuality ( int qualityIndex );
+    void measureAirQuality ( unsigned int qualityIndex );
 };
+
+void WeatherReport::sunset( double time )
+{
+    if(WeatherReport::timeOfDay > time )
+    {
+        WeatherReport::isDaytime = false;
+    }
+    else
+    {
+        WeatherReport::isDaytime = true;
+    }
+}
+
+int WeatherReport::updateTemperature( int currentTemp )
+{
+    WeatherReport::temperature = currentTemp;
+    return currentTemp;
+}
+
+void WeatherReport::measureAirQuality( unsigned int qualityIndex )
+{
+    WeatherReport::airQualityIndex = qualityIndex;
+}
 /*
  10)
  */
 struct GiftCard
 {
-    double cardBalance = 100.00;
     unsigned int expirationDate = 20221231; //yyyymmdd
+    double cardBalance = 100.00;
     const double cardNumber = 6155200244839177.0;
 
     void makePurchase(double currentBalance, double itemCost, unsigned int expiration);
     double reloadCard(double currentBalance, double addBalance);
 };
+
+void GiftCard::makePurchase(double currentBalance, double itemCost, unsigned int expiration)
+{
+    if( expiration == false )
+    {
+        currentBalance -= itemCost;
+    }
+}
+
+double GiftCard::reloadCard(double currentBalance, double addBalance)
+{
+    currentBalance += addBalance;
+    GiftCard::cardBalance = currentBalance;
+    return currentBalance;
+}
 
 #include <iostream>
 int main()

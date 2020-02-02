@@ -49,22 +49,20 @@ int main()
  */
 struct Headphones
 {
-    unsigned int volume;
-    bool powerSwitch;
+    unsigned int volume { 3 };
+    bool powerSwitch { true };
 
-    Headphones() 
-    { 
-        volume = 3; 
-        powerSwitch = true; 
-    }
+    Headphones();
 
     void increaseVolume( unsigned int vol );
 };
 
+Headphones::Headphones() {}
+
 void Headphones::increaseVolume ( unsigned int vol )
 {
     Headphones::volume = vol;
-    std::cout << "Volume set at :" << vol << std::endl;
+    std::cout << "Volume set at: " << vol << std::endl;
 }
 /*
  2)
@@ -76,12 +74,9 @@ struct Scoreboard
     int homeScore;
     int awayScore;
 
-    Scoreboard() 
-    { 
-        timeRemaining = 20.00f; 
-        period = 1; 
-        homeScore = 0; 
-        awayScore = 0;
+    Scoreboard() : timeRemaining(20.00f), period(1), homeScore(0), awayScore(0)
+    {
+
     }
 
     struct Penalty // nested 1
@@ -103,6 +98,7 @@ struct Scoreboard
 void Scoreboard::startGame()
 {
     std::cout << "Game on!" << std::endl;
+    std::cout << "Time Remaining: " << Scoreboard::timeRemaining << std::endl;
 }
 
 void Scoreboard::callPenalty( Scoreboard::Penalty penalty, int playerNum, bool isMajor )
@@ -125,33 +121,27 @@ void Scoreboard::callPenalty( Scoreboard::Penalty penalty, int playerNum, bool i
  */
 struct Team
 {
-    int leftWing;
-    int rightWing;
-    int center;
-    int leftDefense;
-    int rightDefense;
-    int goalie;
-    double winPercentage;
-    bool isPlayoffTeam;
+    int leftWing = 9;
+    int rightWing = 28;
+    int center = 39;
+    int leftDefense = 65;
+    int rightDefense = 88;
+    int goalie = 31;
+    double winPercentage = 0.0;
+    bool isPlayoffTeam = true;
 
-    Team()
-    { 
-        leftWing = 9; 
-        rightWing = 28; 
-        center = 39; 
-        leftDefense = 65; 
-        rightDefense = 88; 
-        goalie = 31; 
-        winPercentage = 0.0; 
-        isPlayoffTeam = true; 
-    }
+    Team();
 
     void lineChange( int LW, int RW, int C, int LD, int RD );
     double calculateWinPercentage( double seasonWins, double seasonLoss );
 };
 
+Team::Team() {}
+
 void Team::lineChange( int LW, int RW, int C, int LD, int RD )
 {
+    std::cout << "Subbing out: " << Team::leftWing << ", " << Team::rightWing << ", " << Team::center << ", " << Team::leftDefense << ", " << Team::rightDefense <<std::endl;
+
     Team::leftWing = LW;
     Team::rightWing = RW;
     Team::center = C;
@@ -176,27 +166,28 @@ struct IceRink
     bool isGameDay;
     unsigned int rinkCapacity;
 
-    IceRink()
-    { 
-        iceIsResurfaced = false; 
-        isGameDay = true; 
-        rinkCapacity = 17500; 
-    }
+    IceRink();
 
     struct Zamboni //nested 2
     {
         double waterTankVolume;
         bool isBroken;
         
-        Zamboni() 
-        { 
-            waterTankVolume = 20.0; 
-            isBroken = false; 
-        }
+        Zamboni();
     };
 
     void resurfaceIce( Zamboni zamboni );
 };
+
+IceRink::IceRink() : iceIsResurfaced(false),  isGameDay(true), rinkCapacity(17500)
+{
+
+}
+
+IceRink::Zamboni::Zamboni() : waterTankVolume(20.0), isBroken(false)
+{
+
+}
 
 void IceRink::resurfaceIce( Zamboni zamboni )
 {
@@ -222,19 +213,16 @@ void IceRink::resurfaceIce( Zamboni zamboni )
  */
 struct Referee
 {
-    bool isBlind;
-    unsigned int yearsExperience ;
-    bool puckInPlay;
+    bool isBlind = true;
+    unsigned int yearsExperience = 8; 
+    bool puckInPlay = false;
 
-    Referee()
-    { 
-        isBlind = true; 
-        yearsExperience = 8; 
-        puckInPlay = false;
-    }
+    Referee();
 
     void faceOff();
 };
+
+Referee::Referee() {}
 
 void Referee::faceOff()
 {
@@ -246,16 +234,12 @@ void Referee::faceOff()
  */
 struct Attendee
 {
+    Attendee();
+
     bool homeTeamFan;
     bool isHyped;
     int age;
 
-    Attendee()
-    { 
-        homeTeamFan = true; 
-        isHyped = false; 
-        age = 25;
-    }
 
     struct Ticket // nested 3
     {
@@ -275,6 +259,11 @@ struct Attendee
 
     void cheerForTeam( bool homeFan );
 };
+
+Attendee::Attendee() : homeTeamFan(true), isHyped(false), age(25) 
+{
+
+}
 
 void Attendee::cheerForTeam( bool homeFan )
 {
@@ -342,22 +331,19 @@ void Game::intermission( Attendee fan, Scoreboard stateOfGame )
  */
 struct Television
 {   
-    bool isTvOn;
+    bool isTvOn = false;
     unsigned int volume = 15;
     unsigned int channel = 48;
 
-    Television()
-    {
-        isTvOn = false;
-        volume = 15;
-        channel = 48;
-    }
+    Television();
     
     void setVolume( unsigned int vol );
     void changeChannel( unsigned int changeTo );
     bool powerSwitch( bool power );
     void playThroughHeadphones( Headphones headphones );
 };
+
+Television::Television() {}
 
 void Television::setVolume( unsigned int vol )
 {
@@ -398,29 +384,25 @@ void Television::playThroughHeadphones( Headphones headphones )
  */
 struct WeatherReport
 {
-    int temperature;
-    double percentHumidity;
-    float chanceOfRain;
-    unsigned int airQualityIndex;
-    double barometer;
-    double timeOfDay; // in format of military time hour . fraction of hour
-    bool isDaytime;
+    int temperature {55};
+    double percentHumidity {0.4};
+    float chanceOfRain {0.50f};
+    unsigned int airQualityIndex = 7;
+    double barometer = 31.44;
+    double timeOfDay = 21.25; // in format of military time hour . fraction of hour
+    bool isDaytime {false};
 
-    WeatherReport()
-    {
-        temperature = 55;
-        percentHumidity = 0.4;
-        chanceOfRain = 0.50f;
-        airQualityIndex = 7;
-        barometer = 31.44;
-        timeOfDay = 21.25;
-        isDaytime = false;
-    }
+    WeatherReport();
 
     void sunset( double time );
     int updateTemperature ( int currentTemp );
     void measureAirQuality ( unsigned int qualityIndex );
 };
+
+WeatherReport::WeatherReport()
+{
+
+}
 
 void WeatherReport::sunset( double time )
 {
@@ -456,16 +438,17 @@ struct GiftCard
     double cardNumber = 6155200244839177.0; //removed const from previous assignment to allow overwrite in constructor
 
     // constructor will overwrite default values
-    GiftCard()
-    {
-        expirationDate = 20230131; //yyyymmdd
-        cardBalance = 150.00;
-        cardNumber = 2833730365431231.0;
-    }
+    GiftCard();
 
     void makePurchase(double itemCost);
     double reloadCard(double addBalance);
 };
+
+GiftCard::GiftCard() : expirationDate(20230131), cardBalance(150.00), cardNumber(2833730365431231.0) 
+{
+
+}
+
 
 void GiftCard::makePurchase(double itemCost)
 {
@@ -492,6 +475,7 @@ int main()
 {
     Example::main();
     Headphones airPods;
+    std::cout << airPods.volume << std::endl;
     airPods.increaseVolume(6);
 
     Scoreboard newGame;

@@ -90,7 +90,7 @@ Headphones::Headphones() {}
 
 void Headphones::increaseVolume ( unsigned int vol )
 {
-    Headphones::volume = vol;FIXME its not a static member variable, don't write fully qualified name
+    volume = vol;
     std::cout << "Volume set at: " << vol << std::endl;
 }
 
@@ -148,7 +148,7 @@ struct Scoreboard
 void Scoreboard::startGame()
 {
     std::cout << "Game on!" << std::endl;
-    std::cout << "Time Remaining: " << Scoreboard::timeRemaining << std::endl;FIXME its not a static member variable, don't write fully qualified name
+    std::cout << "Time Remaining: " << timeRemaining << std::endl;
 }
 
 void Scoreboard::callPenalty( Scoreboard::Penalty penalty, int playerNum, bool isMajor )
@@ -169,23 +169,21 @@ void Scoreboard::callPenalty( Scoreboard::Penalty penalty, int playerNum, bool i
 
 void Scoreboard::clockTick()
 {
-    while( Scoreboard::timeRemaining > 0 ) FIXME its not a static member variable, don't write fully qualified name
+    while( timeRemaining > 0 )
     {
-        --Scoreboard::timeRemaining; FIXME its not a static member variable, don't write fully qualified name
+        --timeRemaining; 
     } 
-    if( Scoreboard::period < 3 ) FIXME its not a static member variable, don't write fully qualified name
+    if( period < 3 )
     {
-        std::cout << "End of Period " << Scoreboard::period << std::endl; FIXME its not a static member variable, don't write fully qualified name
-        Scoreboard::timeRemaining = 20;    FIXME its not a static member variable, don't write fully qualified name
-        ++Scoreboard::period;  FIXME its not a static member variable, don't write fully qualified name
-        std::cout << "Now starting Period " << Scoreboard::period << std::endl;FIXME its not a static member variable, don't write fully qualified name
+        std::cout << "End of Period " << period << std::endl; 
+        timeRemaining = 20;  
+        ++period;  
+        std::cout << "Now starting Period " << period << std::endl;
     }
     else
     {
         std::cout << "End of regulation!" << std::endl;
     }
-       FIXME clean up blank space
-
 }
 /*
  3)
@@ -211,13 +209,13 @@ Team::Team() {}
 
 void Team::lineChange( int LW, int RW, int C, int LD, int RD )
 {
-    std::cout << "Subbing out: " << Team::leftWing << ", " << Team::rightWing << ", " << Team::center << ", " << Team::leftDefense << ", " << Team::rightDefense <<std::endl; FIXME its not a static member variable, don't write fully qualified name
+    std::cout << "Subbing out: " << leftWing << ", " << rightWing << ", " << center << ", " << leftDefense << ", " << rightDefense <<std::endl; 
 
-    Team::leftWing = LW; FIXME its not a static member variable, don't write fully qualified name
-    Team::rightWing = RW; FIXME its not a static member variable, don't write fully qualified name
-    Team::center = C; FIXME its not a static member variable, don't write fully qualified name
-    Team::leftDefense = LD; FIXME its not a static member variable, don't write fully qualified name
-    Team::rightDefense = RD; FIXME its not a static member variable, don't write fully qualified name
+    leftWing = LW;
+    rightWing = RW;
+    center = C; 
+    leftDefense = LD; 
+    rightDefense = RD; 
 
     std::cout << "Active Players: " << LW << ", " << RW << ", " << C << ", " << LD << ", " << RD << std::endl;
 }
@@ -266,7 +264,7 @@ void IceRink::resurfaceIce( Zamboni zamboni )
     {
         if( zamboni.waterTankVolume >= 2.0 )
         {
-            IceRink::iceIsResurfaced = true; FIXME its not a static member variable, don't write fully qualified name
+            iceIsResurfaced = true; 
             zamboni.waterTankVolume -= 2.0;
         }
         else //fill up the tank
@@ -297,7 +295,7 @@ Referee::Referee() {}
 
 void Referee::faceOff()
 {
-    Referee::puckInPlay = true; FIXME its not a static member variable, don't write fully qualified name
+    puckInPlay = true; 
     std::cout << "Puck is live!" << std::endl;
 }
 /*
@@ -310,7 +308,6 @@ struct Attendee
     bool homeTeamFan;
     bool isHyped;
     int age;
-
 
     struct Ticket // nested 3
     {
@@ -326,7 +323,6 @@ struct Attendee
             row = 'C'; 
             seat = 4; 
         }
-
 
         float priceIncrease( int daysToGame);
     };
@@ -344,12 +340,12 @@ void Attendee::cheerForTeam( bool homeFan )
 {
     if( homeFan == true )
     {
-        Attendee::isHyped = true; FIXME its not a static member variable, don't write fully qualified name
+        isHyped = true; 
         std::cout << "This crowd is ROARING!!!" << std::endl;
     }
     else
     {
-    std::cout << "You can really feel the presenece of the Away team's fans tonight!" << std::endl; FIXME formatting
+    std::cout << "You can really feel the presenece of the Away team's fans tonight!" << std::endl; 
     }
 }
 
@@ -357,9 +353,9 @@ float Attendee::Ticket::priceIncrease( int daysToGame )
 {
     for( int i = 0; i <= daysToGame; ++i)
     {
-        Attendee::Ticket::costOfTicket *= 1.1f; FIXME its not a static member variable, don't write fully qualified name
+        costOfTicket *= 1.1f;
     }
-    return Attendee::Ticket::costOfTicket; FIXME its not a static member variable, don't write fully qualified name
+    return costOfTicket; 
 }
 /*
  7)
@@ -432,7 +428,7 @@ Television::Television() {}
 
 void Television::setVolume( int vol )
 {
-    Television::volume = vol; FIXME its not a static member variable, don't write fully qualified name
+    volume = vol;
 
     std::cout << "Volume now set at: " << vol << std::endl;
 
@@ -440,9 +436,9 @@ void Television::setVolume( int vol )
 
 void Television::changeChannel( int changeTo )
 {
-    int temp = Television::channel; FIXME its not a static member variable, don't write fully qualified name
+    int temp = channel; 
 
-    Television::channel = changeTo; FIXME its not a static member variable, don't write fully qualified name
+    channel = changeTo; 
 
     std::cout << "Channel changed from " << temp << " to " << changeTo << std::endl;
 }
@@ -461,31 +457,31 @@ bool Television::powerSwitch( bool power )
 
 void Television::playThroughHeadphones( Headphones headphones )
 {
-    Television::volume = 0; FIXME its not a static member variable, don't write fully qualified name
+    volume = 0; 
     headphones.powerSwitch = true;
 }
 
 void Television::channelUpOrDown( int changeTo )
 {
-    if( changeTo == Television::channel )  FIXME its not a static member variable, don't write fully qualified name
+    if( changeTo == channel ) 
     {
         std::cout << "Already on channel " << changeTo << std::endl;
     }
-    else if( changeTo > Television::channel ) FIXME its not a static member variable, don't write fully qualified name
+    else if( changeTo > channel ) 
     {
-        while( Television::channel != changeTo )
+        while( channel != changeTo )
         {
-            ++Television::channel; FIXME its not a static member variable, don't write fully qualified name
-            std::cout << "Channel: " << Television::channel << std::endl;FIXME its not a static member variable, don't write fully qualified name
+            ++channel; 
+            std::cout << "Channel: " << channel << std::endl;
         }
     }
-    else // changeTo < Television::channel
+    else // changeTo < channel
     {
-        int temp = Television::channel - changeTo;FIXME its not a static member variable, don't write fully qualified name
+        int temp = channel - changeTo;
         for( int i = 0; i < temp; ++i )
         {
-            --Television::channel;FIXME its not a static member variable, don't write fully qualified name
-            std::cout << "Channel: " << Television::channel << std::endl;FIXME its not a static member variable, don't write fully qualified name
+            --channel;
+            std::cout << "Channel: " << channel << std::endl;
         }
     }
 }
@@ -516,27 +512,27 @@ WeatherReport::WeatherReport()
 
 void WeatherReport::sunset( double time )
 {
-    if(WeatherReport::timeOfDay > time )FIXME its not a static member variable, don't write fully qualified name
+    if(timeOfDay > time )
     {
-        WeatherReport::isDaytime = false;FIXME its not a static member variable, don't write fully qualified name
+        isDaytime = false;
         std::cout << "The stars are bright tonight!" << std::endl;
     }
     else
     {
-        WeatherReport::isDaytime = true;FIXME its not a static member variable, don't write fully qualified name
+        isDaytime = true;
         std::cout << "There's still time left to enjoy the sun!" << std::endl;
     }
 }
 
-int WeatherReport::updateTemperature( int currentTemp )FIXME its not a static member variable, don't write fully qualified name
+int WeatherReport::updateTemperature( int currentTemp )
 {
-    WeatherReport::temperature = currentTemp;FIXME its not a static member variable, don't write fully qualified name
+    temperature = currentTemp;
     return currentTemp;
 }
 
 void WeatherReport::measureAirQuality( unsigned int qualityIndex )
 {
-    WeatherReport::airQualityIndex = qualityIndex;FIXME its not a static member variable, don't write fully qualified name
+    airQualityIndex = qualityIndex;
 }
 /*
  10)
@@ -563,11 +559,11 @@ GiftCard::GiftCard() : expirationDate(20230131), cardBalance(150.00), cardNumber
 
 void GiftCard::makePurchase(double itemCost)
 {
-    if( GiftCard::expirationDate >= 20200131 )FIXME its not a static member variable, don't write fully qualified name
+    if( expirationDate >= 20200131 )
     {
-        GiftCard::cardBalance -= itemCost;FIXME its not a static member variable, don't write fully qualified name
+        cardBalance -= itemCost;
 
-        std::cout << "Your remaining balance is: " << GiftCard::cardBalance << std::endl;FIXME its not a static member variable, don't write fully qualified name
+        std::cout << "Your remaining balance is: " << cardBalance << std::endl;
     }
     else
     {
@@ -577,16 +573,16 @@ void GiftCard::makePurchase(double itemCost)
 
 double GiftCard::reloadCard(double addBalance)
 {
-    GiftCard::cardBalance += addBalance;FIXME its not a static member variable, don't write fully qualified name
-    return GiftCard::cardBalance;FIXME its not a static member variable, don't write fully qualified name
+    cardBalance += addBalance;
+    return cardBalance;
 }
 
 void GiftCard::recurringPurchase(double subscriptionCost, int subscriptionLength)
 {
     for( int i = 0; i < subscriptionLength; ++i)
     {
-        GiftCard::cardBalance -= subscriptionCost;FIXME its not a static member variable, don't write fully qualified name
-        std::cout << "Card billed $" << subscriptionCost << ". Your current balance is " << GiftCard::cardBalance << " and your subscription is active for " << subscriptionLength << " more months. " << std::endl;FIXME its not a static member variable, don't write fully qualified name
+        cardBalance -= subscriptionCost;
+        std::cout << "Card billed $" << subscriptionCost << ". Your current balance is " << cardBalance << " and your subscription is active for " << subscriptionLength << " more months. " << std::endl;
     }
 }
 

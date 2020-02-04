@@ -83,6 +83,7 @@ struct Headphones
     Headphones();
 
     void increaseVolume( unsigned int vol );
+    unsigned int holdDecreaseVolume( unsigned int vol, unsigned int target );
 };
 
 Headphones::Headphones() {}
@@ -92,17 +93,37 @@ void Headphones::increaseVolume ( unsigned int vol )
     Headphones::volume = vol;
     std::cout << "Volume set at: " << vol << std::endl;
 }
+
+unsigned int Headphones::holdDecreaseVolume ( unsigned int vol, unsigned int target )
+{
+    if( vol <  target )
+    {
+        return 0;
+    }
+    else if ( vol > target )
+    {
+        while( vol >= target )
+        {
+            vol -= 1;
+            if( vol == target )
+            {
+                return vol;
+            }
+        }
+    }
+    return volume;
+}
 /*
  2)
  */
 struct Scoreboard
 {
-    float timeRemaining;
+    int timeRemaining; // changed to int for new while loop function clockTick
     int period;
     int homeScore;
     int awayScore;
 
-    Scoreboard() : timeRemaining(20.00f), period(1), homeScore(0), awayScore(0)
+    Scoreboard() : timeRemaining(20), period(1), homeScore(0), awayScore(0)
     {
 
     }
@@ -121,6 +142,7 @@ struct Scoreboard
 
     void startGame();
     void callPenalty( Penalty penalty, int playerNum, bool isMajor ); 
+    void clockTick();
 };
 
 void Scoreboard::startGame()
@@ -143,6 +165,27 @@ void Scoreboard::callPenalty( Scoreboard::Penalty penalty, int playerNum, bool i
     }
 
     penalty.playerNumber = playerNum;    
+}
+
+void Scoreboard::clockTick()
+{
+    while( Scoreboard::timeRemaining > 0 )
+    {
+        --Scoreboard::timeRemaining;
+    }
+    if( Scoreboard::period < 3 )
+    {
+        std::cout << "End of Period " << Scoreboard::period << std::endl;
+        Scoreboard::timeRemaining = 20;   
+        ++Scoreboard::period;  
+        std::cout << "Now starting Period " << Scoreboard::period << std::endl;
+    }
+    else
+    {
+        std::cout << "End of regulation!" << std::endl;
+    }
+       
+
 }
 /*
  3)
@@ -283,6 +326,9 @@ struct Attendee
             row = 'C'; 
             seat = 4; 
         }
+
+
+        float priceIncrease( int daysToGame);
     };
 
     void cheerForTeam( bool homeFan );
@@ -292,6 +338,7 @@ Attendee::Attendee() : homeTeamFan(true), isHyped(false), age(25)
 {
 
 }
+
 
 void Attendee::cheerForTeam( bool homeFan )
 {
@@ -304,6 +351,15 @@ void Attendee::cheerForTeam( bool homeFan )
     {
     std::cout << "You can really feel the presenece of the Away team's fans tonight!" << std::endl;
     }
+}
+
+float Attendee::Ticket::priceIncrease( int daysToGame )
+{
+    for( int i = 0; i <= daysToGame; ++i)
+    {
+        Attendee::Ticket::costOfTicket *= 1.1f;
+    }
+    return Attendee::Ticket::costOfTicket;
 }
 /*
  7)
@@ -360,20 +416,21 @@ void Game::intermission( Attendee fan, Scoreboard stateOfGame )
 struct Television
 {   
     bool isTvOn = false;
-    unsigned int volume = 15;
-    unsigned int channel = 48;
+    int volume = 15;
+    int channel = 48;
 
     Television();
     
-    void setVolume( unsigned int vol );
-    void changeChannel( unsigned int changeTo );
+    void setVolume( int vol );
+    void changeChannel( int changeTo );
     bool powerSwitch( bool power );
     void playThroughHeadphones( Headphones headphones );
+    void channelUpOrDown( int changeTo );
 };
 
 Television::Television() {}
 
-void Television::setVolume( unsigned int vol )
+void Television::setVolume( int vol )
 {
     Television::volume = vol;
 
@@ -381,9 +438,9 @@ void Television::setVolume( unsigned int vol )
 
 }
 
-void Television::changeChannel( unsigned int changeTo )
+void Television::changeChannel( int changeTo )
 {
-    unsigned int temp = Television::channel;
+    int temp = Television::channel;
 
     Television::channel = changeTo;
 
@@ -406,6 +463,31 @@ void Television::playThroughHeadphones( Headphones headphones )
 {
     Television::volume = 0;
     headphones.powerSwitch = true;
+}
+
+void Television::channelUpOrDown( int changeTo )
+{
+    if( changeTo == Television::channel ) 
+    {
+        std::cout << "Already on channel " << changeTo << std::endl;
+    }
+    else if( changeTo > Television::channel )
+    {
+        while( Television::channel != changeTo )
+        {
+            ++Television::channel;
+            std::cout << "Channel: " << Television::channel << std::endl;
+        }
+    }
+    else // changeTo < Television::channel
+    {
+        int temp = Television::channel - changeTo;
+        for( int i = 0; i < temp; ++i )
+        {
+            --Television::channel;
+            std::cout << "Channel: " << Television::channel << std::endl;
+        }
+    }
 }
 /*
  9)
@@ -470,6 +552,7 @@ struct GiftCard
 
     void makePurchase(double itemCost);
     double reloadCard(double addBalance);
+    void recurringPurchase(double subscriptionCost, int subscriptionLength);
 };
 
 GiftCard::GiftCard() : expirationDate(20230131), cardBalance(150.00), cardNumber(2833730365431231.0) 
@@ -498,6 +581,15 @@ double GiftCard::reloadCard(double addBalance)
     return GiftCard::cardBalance;
 }
 
+void GiftCard::recurringPurchase(double subscriptionCost, int subscriptionLength)
+{
+    for( int i = 0; i < subscriptionLength; ++i)
+    {
+        GiftCard::cardBalance -= subscriptionCost;
+        std::cout << "Card billed $" << subscriptionCost << ". Your current balance is " << GiftCard::cardBalance << " and your subscription is active for " << subscriptionLength << " more months. " << std::endl;
+    }
+}
+
 #include <iostream>
 int main()
 {
@@ -505,11 +597,13 @@ int main()
     Headphones airPods;
     std::cout << airPods.volume << std::endl;
     airPods.increaseVolume(6);
+    std::cout << "Volume decreased to: " << airPods.holdDecreaseVolume(airPods.volume, 2) << std::endl; // new volume function, conditional while
 
     Scoreboard newGame;
     newGame.startGame();
     Scoreboard::Penalty sinBin;
     newGame.callPenalty( sinBin, 88, 0);
+    newGame.clockTick(); // new scoreboard function, while
 
     Team sanJoseSharks;
     sanJoseSharks.lineChange(12, 19, 20, 44, 4);
@@ -521,9 +615,14 @@ int main()
     Attendee me;
     me.cheerForTeam(true);
 
+    Attendee::Ticket sharksGame;
+    std::cout << "Expected ticket value on game day: " << sharksGame.priceIncrease(3) << std::endl; // value appreciation ticket function, for loop
+
     Television flatscreen;
     flatscreen.setVolume(30);
     flatscreen.changeChannel(7);
+    flatscreen.channelUpOrDown(10); // channel changer, "hold +" while loop
+    flatscreen.channelUpOrDown(3); // channel changer, "hold -" for loop
     
     WeatherReport sanFrancisco;
     sanFrancisco.sunset(17.25);
@@ -532,6 +631,7 @@ int main()
     GiftCard amazon;
     amazon.makePurchase(24.97);
     std::cout << "Credit added to your gift card. New balance is: " << amazon.reloadCard(100.0) << std::endl;
+    amazon.recurringPurchase(4.99, 6); // subscription purchase function, for loop
 
 
 
